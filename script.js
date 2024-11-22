@@ -1,19 +1,28 @@
 const boardManager = (function () {
-    let board =
-        [`A1`, `A2`, `A3`,
-            `B1`, `B2`, `B3`,
-            `C1`, `C2`, `C3`];
+    let board = [
+        `A1`, `A2`, `A3`,
+        `B1`, `B2`, `B3`,
+        `C1`, `C2`, `C3`
+    ];
 
-    let players = [];
+    const getBoard = () => board;
 
-    getBoard = () => board;
-
-    startGame = () => {
-
+    const displayBoard = () => {
+        let y = 0;
+        for (let x = 0; x < 3; x++) {
+            console.log(`${board[y]} || ${board[y + 1]} || ${board[y + 2]}`);
+            y += 3;
+        }
     }
 
+    const startGame = () => {
+        for (let x = 1; x <= 2; x++) {
+            let _player = prompt(`Player ${x}, Enter Name`);
+            playerManager.addPlayer(Player(_player));
+        }
+    }
 
-    takeTurn = (player, input) => {
+    const takeTurn = (player, input) => {
         player = player.toLowerCase();
         player === `x` || player.toLowerCase === `o` ?
             board[board.indexOf(input)] = player :
@@ -21,42 +30,54 @@ const boardManager = (function () {
     };
 
     return {
+        displayBoard,
         getBoard,
-        takeTurn
+        takeTurn,
+        startGame
     }
 })();
 
 const playerManager = (function () {
     let players = [];
 
-    showPlayers = () => players;
+    const getPlayers = () => players;
 
-    addPlayer = (player) => {
+    const addPlayer = (player) => {
         players.length >= 2 ?
             console.error(`Max Player Count Reached`) :
             players.push(player);
     };
 
+    const getPlayer = (player) => {
+        if (player === 1 || player === 2) {
+            return players[player - 1];
+        } else {
+            console.error(`Could not find player${player}`);
+        }
+    }
+
     return {
-        showPlayers,
+        getPlayers,
+        getPlayer,
         addPlayer
     }
 })();
 
-const player = function (name) {
+const Player = function (name) {
     let score = 0;
 
-    addScore = () => score++;
+    const displayInfo = () => `Player Name: ${name}, Score: ${score}`;
 
-    showScore = () => `${name}: ${score}`;
+    const addScore = (value) => score += value;
+
+    const getScore = () => score;
+
+    const resetScore = () => score = 0;
 
     return {
-        name,
+        displayInfo,
         addScore,
-        showScore
+        getScore,
+        resetScore,
     }
 }
-
-playerManager.addPlayer(player(`player1`));
-playerManager.addPlayer(player(`player2`));
-
