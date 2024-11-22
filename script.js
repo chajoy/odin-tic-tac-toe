@@ -1,3 +1,27 @@
+const gameManager = (function () {
+    let winner;
+
+    const startGame = () => {
+        for (let x = 1; x <= 2; x++) {
+            let _player = prompt(`Player ${x}, Enter Name`);
+            playerManager.addPlayer(Player(_player));
+        }
+    }
+
+    const takeTurn = (player, input) => {
+        player = player.toLowerCase();
+        player === `x` || player.toLowerCase === `o` ?
+            boardManager.board[board.indexOf(input)] = player :
+            console.error(`Incorrect Input, Try Again`);
+    };
+
+    return {
+        winner,
+        startGame,
+        takeTurn
+    }
+})();
+
 const boardManager = (function () {
     let board = [
         `A1`, `A2`, `A3`,
@@ -15,25 +39,9 @@ const boardManager = (function () {
         }
     }
 
-    const startGame = () => {
-        for (let x = 1; x <= 2; x++) {
-            let _player = prompt(`Player ${x}, Enter Name`);
-            playerManager.addPlayer(Player(_player));
-        }
-    }
-
-    const takeTurn = (player, input) => {
-        player = player.toLowerCase();
-        player === `x` || player.toLowerCase === `o` ?
-            board[board.indexOf(input)] = player :
-            console.error(`Incorrect Input, Try Again`);
-    };
-
     return {
         displayBoard,
         getBoard,
-        takeTurn,
-        startGame
     }
 })();
 
