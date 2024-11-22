@@ -8,17 +8,9 @@ const gameManager = (function () {
         }
     }
 
-    const takeTurn = (player, input) => {
-        player = player.toLowerCase();
-        player === `x` || player.toLowerCase === `o` ?
-            boardManager.board[board.indexOf(input)] = player :
-            console.error(`Incorrect Input, Try Again`);
-    };
-
     return {
         winner,
         startGame,
-        takeTurn
     }
 })();
 
@@ -39,8 +31,16 @@ const boardManager = (function () {
         }
     }
 
+    const takeTurn = (player, input) => {
+        player = player.toLowerCase();
+        player === `x` || player.toLowerCase === `o` ?
+            boardManager.board[board.indexOf(input)] = player :
+            console.error(`Incorrect Input, Try Again`);
+    };
+
     return {
         displayBoard,
+        takeTurn,
         getBoard,
     }
 })();
