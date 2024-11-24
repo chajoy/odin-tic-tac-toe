@@ -1,3 +1,25 @@
+const Player = function (name) {
+    let score = 0;
+
+    const displayInfo = () => `Player Name: ${name}, Score: ${score}`;
+
+    const addScore = (value) => score += value;
+
+    const getScore = () => score;
+
+    const resetScore = () => score = 0;
+
+    const getName = () => name;
+
+    return {
+        displayInfo,
+        addScore,
+        getScore,
+        resetScore,
+        getName,
+    }
+}
+
 const gameManager = (function () {
     let winner;
 
@@ -96,7 +118,7 @@ const boardManager = (function () {
 
     const contains = (value) => {
         for (let x = 0; x < board.length; x++) {
-            for (let y = 0; y < board[y].length; y++) {
+            for (let y = 0; y < board[x].length; y++) {
                 if (board[x][y] === value) {
                     return true;
                 }
@@ -146,24 +168,6 @@ const playerManager = (function () {
     }
 })();
 
-const Player = function (name) {
-    let score = 0;
-
-    const displayInfo = () => `Player Name: ${name}, Score: ${score}`;
-
-    const addScore = (value) => score += value;
-
-    const getScore = () => score;
-
-    const resetScore = () => score = 0;
-
-    const getName = () => name;
-
-    return {
-        displayInfo,
-        addScore,
-        getScore,
-        resetScore,
-        getName,
-    }
-}
+const DOM_manager = (function () {
+    
+})();

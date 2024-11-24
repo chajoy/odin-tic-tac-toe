@@ -1,3 +1,9 @@
+:root {
+    --primary-colour: #DDEFBB;
+    --secondary-colour: #FFEEEE;
+    --green-dark: #84885a;
+}
+
 *,
 *::before,
 *::after {
@@ -15,6 +21,11 @@ body {
     background: linear-gradient(to right, #DDEFBB, #FFEEEE);
     min-height: 100vh;
     font-family: "Raleway", sans-serif;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
 }
 
 img,
@@ -54,4 +65,39 @@ h4,
 h5,
 h6 {
     text-wrap: balance;
+}
+
+.container {
+    height: 50vh;
+    aspect-ratio: 1 / 1;
+    border-radius: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+button {
+    background-color: rgb(223, 231, 146);
+    padding: 20px;
+    border-radius: 10px;
+    border: 5px solid var(--green-dark);
+    color: var(--green-dark);
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: var(--green-dark);
+    color: var(--primary-colour);
+    cursor: pointer;
+}
+
+.cell {
+    background-color: rgba(26, 26, 26, 0.502);
+    border-radius: 20px;
+    transition: filter .5s;
+}
+
+.cell:hover {
+    cursor: pointer;
+    filter: brightness(5);
 }
