@@ -1,22 +1,26 @@
 const gameManager = (function () {
     let winner;
 
-    let x = 0;
-
     let currentPlayer;
 
-    const setWinner = (player) => setWinner = player;
-
     const playGame = () => {
+        let input, _player;
         for (let x = 1; x <= 2; x++) {
-            let _player = prompt(`Player ${x}, Enter Name`);
+            do {
+                _player = prompt(`Player ${x}, Enter Name`);
+            } while (playerManager.getPlayers().includes(_player));
             playerManager.addPlayer(Player(_player));
         }
 
         currentPlayer = playerManager.getPlayer(1).getName();
 
+        let x = 0;
+
         while (!winner && x <= 9) {
-            let input = prompt(`${currentPlayer}, Take Your Turn`);
+            do {
+                input = prompt(`${currentPlayer}, Take Your Turn`);
+            } while (!boardManager.contains(input.toUpperCase()));
+
             boardManager.takeTurn(currentPlayer, input);
             winner = boardManager.checkWinner();
             if (currentPlayer === playerManager.getPlayer(1).getName()) {
@@ -26,7 +30,6 @@ const gameManager = (function () {
             }
             x++;
         }
-        x = 0;
 
         //if winner is found
         winner ? console.log(`Winner is ${winner}`) : console.log(`Tie`);
@@ -34,7 +37,6 @@ const gameManager = (function () {
 
     return {
         playGame,
-        setWinner,
     }
 })();
 
@@ -92,18 +94,36 @@ const boardManager = (function () {
         return false;
     }
 
+    const contains = (value) => {
+        for (let x = 0; x < board.length; x++) {
+            for (let y = 0; y < board[y].length; y++) {
+                if (board[x][y] === value) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     return {
         displayBoard,
         takeTurn,
         getBoard,
         checkWinner,
+        contains,
     }
 })();
 
 const playerManager = (function () {
     let players = [];
 
-    const getPlayers = () => players;
+    const getPlayers = () => {
+        let playerNames = [];
+        for (let x = 0; x < players.length; x++) {
+            playerNames.push(players[x].getName());
+        }
+        return playerNames;
+    };
 
     const addPlayer = (player) => {
         players.length >= 2 ?
