@@ -52,10 +52,13 @@ const gameManager = (function () {
         }
     }
 
+    const finishGame = (result) => console.log(result ? `${result.getName()} is the winner` : `Its a tie`);
+
     return {
         setupGame,
         getCurrentPlayer,
         switchCurrentPlayer,
+        finishGame,
     }
 })();
 
@@ -97,7 +100,11 @@ const boardManager = (function () {
             console.error(`Game Not Started`);
             return;
         }
-        checkWinner()
+
+        let winner = checkWinner();
+        if (winner) {
+            gameManager.finishGame(winner);
+        }
     };
 
     const checkWinner = () => {
