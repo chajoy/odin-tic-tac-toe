@@ -32,6 +32,8 @@ const gameManager = (function () {
 
     const setupGame = () => {
         playerManager.clearPlayers();
+        DOM_manager.resetDOM();
+        boardManager.clearBoard();
         let input, _player;
         for (let x = 1; x <= 2; x++) {
             do {
@@ -136,11 +138,20 @@ const boardManager = (function () {
         return false;
     }
 
+    const clearBoard = () => {
+        board = [
+            [`A1`, `A2`, `A3`],
+            [`B1`, `B2`, `B3`],
+            [`C1`, `C2`, `C3`],
+        ];
+    }
+
     return {
         takeTurn,
         getBoard,
         checkWinner,
         contains,
+        clearBoard,
     }
 })();
 
@@ -215,9 +226,18 @@ const DOM_manager = (function () {
         }
     }
 
+    const resetDOM = () => {
+        for (let x = 0; x < cells.length; x++) {
+            for (let y = 0; y < cells[x].length; y++) {
+                cells[x][y].textContent = ``;
+            }
+        }
+    }
+
     storeCells();
 
     return {
         dialog,
+        resetDOM,
     }
 })();
