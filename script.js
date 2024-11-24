@@ -1,6 +1,8 @@
 const Player = function (name) {
     let score = 0;
 
+    let character = playerManager.getPlayers().length > 0 ? `X` : `O`;
+
     const displayInfo = () => `Player Name: ${name}, Score: ${score}`;
 
     const addScore = (value) => score += value;
@@ -11,12 +13,15 @@ const Player = function (name) {
 
     const getName = () => name;
 
+    const getCharacter = () => character;
+
     return {
         displayInfo,
         addScore,
         getScore,
         resetScore,
         getName,
+        getCharacter,
     }
 }
 
@@ -37,13 +42,13 @@ const gameManager = (function () {
         currentPlayer = playerManager.getPlayer(1);
     }
 
-    const getCurrentPlayer = () => currentPlayer ? currentPlayer.getName() : console.error(`No Current Player`);
+    const getCurrentPlayer = () => currentPlayer ? currentPlayer : console.error(`No Current Player`);
 
     const switchCurrentPlayer = () => {
-        if (currentPlayer === playerManager.getPlayer(1).getName()) {
-            currentPlayer = playerManager.getPlayer(2).getName();
+        if (currentPlayer === playerManager.getPlayer(1)) {
+            currentPlayer = playerManager.getPlayer(2);
         } else {
-            currentPlayer = playerManager.getPlayer(1).getName();
+            currentPlayer = playerManager.getPlayer(1);
         }
     }
 
@@ -71,23 +76,31 @@ const boardManager = (function () {
         }
     }
 
-    const takeTurn = (player, choice) => {
+    const takeTurn = (player, choice, cell) => {
         if (player) {
-            choice = choice.toUpperCase();
-            for (let x = 0; x < 3; x++) {
-                for (let y = 0; y < board[x].length; y++) {
-                    if (board[x][y] === choice) {
-                        board[x][y] = player;
-                        console.log(`Placing ${player} at ${x}, ${y}`);
+            if (contains(choice)) {
+                choice = choice.toUpperCase();
+                for (let x = 0; x < 3; x++) {
+                    for (let y = 0; y < board[x].length; y++) {
+                        if (board[x][y] === choice) {
+                            board[x][y] = player;
+                            cell.textContent = player.getCharacter();
+                            console.log(`Placing ${player.getName()} at ${x}, ${y}`);
+                        }
                     }
                 }
+            } else {
+                console.error(`Tile Already Selected`);
+                return;
             }
         } else {
             console.error(`Game Not Started`);
+            return;
         }
+        checkWinner()
     };
 
-    const checkWinner = (player) => {
+    const checkWinner = () => {
         // check rows
         for (let x = 0; x < 3; x++) {
             if (board[0][x] === board[1][x] && board[1][x] === board[2][x]) {
@@ -175,8 +188,9 @@ const DOM_manager = (function () {
                 z++;
                 const cell = document.querySelector(`.cell:nth-of-type(${z})`);
                 cells[x].push(cell);
-                cell.addEventListener(`click`, () => {
-                    boardManager.takeTurn(gameManager.getCurrentPlayer(), cell.getAttribute(`value`));
+                cell.addEventListener(`click`, function () {
+                    boardManager.takeTurn(gameManager.getCurrentPlayer(), cell.getAttribute(`value`), this);
+                    gameManager.switchCurrentPlayer();
                 })
             }
         }
