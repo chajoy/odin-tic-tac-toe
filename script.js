@@ -26,7 +26,7 @@ const Player = function (name) {
 }
 
 const gameManager = (function () {
-    let winner;
+    let turns = 0;
 
     let currentPlayer;
 
@@ -56,13 +56,19 @@ const gameManager = (function () {
         }
     }
 
-    const finishGame = (result) => DOM_manager.dialog(result ? `${result.getName()} is the winner` : `Its a tie`);
+    const addTurn = () => turns++;
+
+    const getTurns = () => turns;
+
+    const finishGame = (result) => DOM_manager.dialog(result ? `${result.getName()} is the winner` : `Its a Tie, Click "Play Game" to Restart`);
 
     return {
         setupGame,
         getCurrentPlayer,
         switchCurrentPlayer,
         finishGame,
+        addTurn,
+        getTurns,
     }
 })();
 
@@ -84,6 +90,7 @@ const boardManager = (function () {
                         if (board[x][y] === choice) {
                             board[x][y] = player;
                             cell.textContent = player.getCharacter();
+                            gameManager.addTurn();
                         }
                     }
                 }
@@ -97,7 +104,7 @@ const boardManager = (function () {
         }
 
         let winner = checkWinner();
-        if (winner) {
+        if (winner || gameManager.getTurns() === 9) {
             gameManager.finishGame(winner);
         }
     };
