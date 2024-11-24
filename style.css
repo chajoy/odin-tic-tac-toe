@@ -73,7 +73,9 @@ h6 {
     border-radius: 20px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr repeat(3, 2fr);
     gap: 20px;
+    min-height: 500px;
 }
 
 button {
@@ -83,6 +85,7 @@ button {
     border: 5px solid var(--green-dark);
     color: var(--green-dark);
     font-weight: bold;
+    grid-column: span 3;
 }
 
 button:hover {
