@@ -36,22 +36,18 @@ const gameManager = (function () {
 
         currentPlayer = playerManager.getPlayer(1).getName();
 
-        let x = 0;
 
-        while (!winner && x <= 9) {
-            do {
-                input = prompt(`${currentPlayer}, Take Your Turn`);
-            } while (!boardManager.contains(input.toUpperCase()));
 
-            boardManager.takeTurn(currentPlayer, input);
-            winner = boardManager.checkWinner();
-            if (currentPlayer === playerManager.getPlayer(1).getName()) {
-                currentPlayer = playerManager.getPlayer(2).getName();
-            } else {
-                currentPlayer = playerManager.getPlayer(1).getName();
-            }
-            x++;
+        input = prompt(`${currentPlayer}, Take Your Turn`);
+        boardManager.takeTurn(currentPlayer, input);
+
+        winner = boardManager.checkWinner();
+        if (currentPlayer === playerManager.getPlayer(1).getName()) {
+            currentPlayer = playerManager.getPlayer(2).getName();
+        } else {
+            currentPlayer = playerManager.getPlayer(1).getName();
         }
+
 
         //if winner is found
         winner ? console.log(`Winner is ${winner}`) : console.log(`Tie`);
@@ -169,5 +165,28 @@ const playerManager = (function () {
 })();
 
 const DOM_manager = (function () {
-    
+    let cells = [];
+
+    const storeCells = () => {
+        let z = 0;
+        for (let x = 0; x < 3; x++) {
+            cells[x] = [];
+            for (let y = 0; y < 3; y++) {
+                z++;
+                const cell = document.querySelector(`.cell:nth-of-type(${z})`);
+                cells[x].push(cell);
+            }
+        }
+    }
+
+    storeCells();
+
+    const updateBoard = () => {
+
+    }
+
+    return {
+        updateBoard,
+        cells,
+    }
 })();
