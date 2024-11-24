@@ -75,7 +75,7 @@ h6 {
     border-radius: 20px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: 1fr repeat(3, 2fr);
+    grid-template-rows: 1fr repeat(3, 2fr) 1fr;
     gap: 20px;
     min-height: 500px;
 }
@@ -111,4 +111,8 @@ button:hover {
 .cell:hover {
     cursor: pointer;
     filter: brightness(5);
+}
+
+.dialog {
+    grid-column: span 3;
 }

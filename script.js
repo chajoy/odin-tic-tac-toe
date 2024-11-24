@@ -31,6 +31,7 @@ const gameManager = (function () {
     let currentPlayer;
 
     const setupGame = () => {
+        playerManager.clearPlayers();
         let input, _player;
         for (let x = 1; x <= 2; x++) {
             do {
@@ -42,7 +43,8 @@ const gameManager = (function () {
         currentPlayer = playerManager.getPlayer(1);
     }
 
-    const getCurrentPlayer = () => currentPlayer ? currentPlayer : console.error(`No Current Player`);
+    const getCurrentPlayer = () => currentPlayer ? currentPlayer : console.log(`No Current Player`);
+
 
     const switchCurrentPlayer = () => {
         if (currentPlayer === playerManager.getPlayer(1)) {
@@ -52,7 +54,7 @@ const gameManager = (function () {
         }
     }
 
-    const finishGame = (result) => console.log(result ? `${result.getName()} is the winner` : `Its a tie`);
+    const finishGame = (result) => DOM_manager.dialog(result ? `${result.getName()} is the winner` : `Its a tie`);
 
     return {
         setupGame,
@@ -71,14 +73,6 @@ const boardManager = (function () {
 
     const getBoard = () => board;
 
-    const displayBoard = () => {
-        let y = 0;
-        for (let x = 0; x < 3; x++) {
-            console.log(`${board[y]} || ${board[y + 1]} || ${board[y + 2]}`);
-            y += 3;
-        }
-    }
-
     const takeTurn = (player, choice, cell) => {
         if (player) {
             if (contains(choice)) {
@@ -88,16 +82,15 @@ const boardManager = (function () {
                         if (board[x][y] === choice) {
                             board[x][y] = player;
                             cell.textContent = player.getCharacter();
-                            console.log(`Placing ${player.getName()} at ${x}, ${y}`);
                         }
                     }
                 }
             } else {
-                console.error(`Tile Already Selected`);
+                DOM_manager.dialog(`Tile Already Selected`, `error`);
                 return;
             }
         } else {
-            console.error(`Game Not Started`);
+            DOM_manager.dialog(`Game Not Started`, `error`);
             return;
         }
 
@@ -144,7 +137,6 @@ const boardManager = (function () {
     }
 
     return {
-        displayBoard,
         takeTurn,
         getBoard,
         checkWinner,
@@ -165,7 +157,7 @@ const playerManager = (function () {
 
     const addPlayer = (player) => {
         players.length >= 2 ?
-            console.error(`Max Player Count Reached`) :
+            DOM_manager.dialog(`Max Player Count Reached`, `error`) :
             players.push(player);
     };
 
@@ -173,19 +165,39 @@ const playerManager = (function () {
         if (player === 1 || player === 2) {
             return players[player - 1];
         } else {
-            console.error(`Could not find player${player}`);
+            console.log(`Could not find Player: ${player}`, `error`);
         }
     }
+
+    const clearPlayers = () => players = [];
 
     return {
         getPlayers,
         getPlayer,
-        addPlayer
+        addPlayer,
+        clearPlayers,
     }
 })();
 
 const DOM_manager = (function () {
     let cells = [];
+
+    const dialogBox = document.getElementById(`dialog`);
+
+    const dialog = (text, type = `general`) => {
+        switch (type) {
+            case `error`:
+                dialogBox.style.color = `#c24040`;
+                dialogBox.textContent = text;
+                break;
+            case `general`:
+                dialogBox.style.color = `black`;
+                dialogBox.textContent = text;
+                break;
+            default:
+                break;
+        }
+    }
 
     const storeCells = () => {
         let z = 0;
@@ -193,7 +205,7 @@ const DOM_manager = (function () {
             cells[x] = [];
             for (let y = 0; y < 3; y++) {
                 z++;
-                const cell = document.querySelector(`.cell:nth-of-type(${z})`);
+                const cell = document.querySelector(`#cell:nth-of-type(${z})`);
                 cells[x].push(cell);
                 cell.addEventListener(`click`, function () {
                     boardManager.takeTurn(gameManager.getCurrentPlayer(), cell.getAttribute(`value`), this);
@@ -206,6 +218,6 @@ const DOM_manager = (function () {
     storeCells();
 
     return {
-        cells,
+        dialog,
     }
 })();
