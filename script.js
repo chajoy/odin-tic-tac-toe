@@ -36,6 +36,7 @@ const gameManager = (function () {
         if (previousWinner) {
             DOM_manager.winner(false);
         }
+        resetTurns();
         playerManager.clearPlayers();
         DOM_manager.resetDOM();
         boardManager.clearBoard();
@@ -65,6 +66,8 @@ const gameManager = (function () {
 
     const getTurns = () => turns;
 
+    const resetTurns = () => turns = 0;
+
     const finishGame = (result) => {
         if (result) {
             DOM_manager.dialog(`${result.getName()} is the winner`);
@@ -81,6 +84,7 @@ const gameManager = (function () {
         finishGame,
         addTurn,
         getTurns,
+        resetTurns,
     }
 })();
 
