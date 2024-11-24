@@ -71,14 +71,13 @@ h6 {
 }
 
 .container {
-    height: 50vh;
-    aspect-ratio: 1 / 1;
+    height: 60vh;
+    min-height: 500px;
     border-radius: 20px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: 1fr repeat(3, 2fr) 1fr;
+    grid-template-rows: repeat(2, 1fr) repeat(3, 3fr) 1fr;
     gap: 20px;
-    min-height: 500px;
 }
 
 button {
@@ -116,4 +115,40 @@ button:hover {
 
 .dialog {
     grid-column: span 3;
+    font-size: 1.5rem;
+}
+
+.inputContainer {
+    grid-column: span 3;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.inputContainer input {
+    background-color: var(--green);
+    border: 5px solid rgba(0, 0, 0, 0);
+    border-radius: 10px;
+    padding: 10px;
+    font-weight: bold;
+    color: var(--green-dark);
+}
+
+.inputContainer input:focus {
+    outline: none;
+    border: 5px solid var(--green-dark);
+}
+
+.inputContainer input::placeholder {
+    color: var(--green-dark);
+}
+
+.winner {
+    color: gold;
+    outline: 5px solid gold;
+    outline-offset: -5px;
+}
+
+.dialog.winner {
+    outline: none;
 }

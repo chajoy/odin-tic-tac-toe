@@ -30,19 +30,23 @@ const gameManager = (function () {
 
     let currentPlayer;
 
+    let previousWinner;
+
     const setupGame = () => {
+        if (previousWinner) {
+            DOM_manager.winner(false);
+        }
         playerManager.clearPlayers();
         DOM_manager.resetDOM();
         boardManager.clearBoard();
-        let input, _player;
-        for (let x = 1; x <= 2; x++) {
-            do {
-                _player = prompt(`Player ${x}, Enter Name`);
-            } while (playerManager.getPlayers().includes(_player));
-            playerManager.addPlayer(Player(_player));
-        }
 
-        currentPlayer = playerManager.getPlayer(1);
+        playerManager.addPlayer(Player(DOM_manager.playerName_inputValue(0) || `Player 1`));
+        playerManager.addPlayer(Player(DOM_manager.playerName_inputValue(1) || `Player 2`));
+
+        if (playerManager.getPlayers().length === 2) {
+            currentPlayer = playerManager.getPlayer(2);
+            switchCurrentPlayer();
+        }
     }
 
     const getCurrentPlayer = () => currentPlayer ? currentPlayer : console.log(`No Current Player`);
@@ -54,13 +58,21 @@ const gameManager = (function () {
         } else {
             currentPlayer = playerManager.getPlayer(1);
         }
+        DOM_manager.dialog(`${currentPlayer.getName()}: It's Your Turn`);
     }
 
     const addTurn = () => turns++;
 
     const getTurns = () => turns;
 
-    const finishGame = (result) => DOM_manager.dialog(result ? `${result.getName()} is the winner` : `Its a Tie, Click "Play Game" to Restart`);
+    const finishGame = (result) => {
+        if (result) {
+            DOM_manager.dialog(`${result.getName()} is the winner`);
+            previousWinner = result.getName();
+        } else {
+            DOM_manager.dialog(`Its a Tie, Click "Play Game" to Restart`);
+        }
+    };
 
     return {
         setupGame,
@@ -91,6 +103,7 @@ const boardManager = (function () {
                             board[x][y] = player;
                             cell.textContent = player.getCharacter();
                             gameManager.addTurn();
+                            gameManager.switchCurrentPlayer();
                         }
                     }
                 }
@@ -104,7 +117,10 @@ const boardManager = (function () {
         }
 
         let winner = checkWinner();
-        if (winner || gameManager.getTurns() === 9) {
+        if (winner) {
+            gameManager.finishGame(winner);
+            DOM_manager.winner(true);
+        } else if (gameManager.getTurns() >= 9) {
             gameManager.finishGame(winner);
         }
     };
@@ -173,10 +189,14 @@ const playerManager = (function () {
         return playerNames;
     };
 
-    const addPlayer = (player) => {
-        players.length >= 2 ?
-            DOM_manager.dialog(`Max Player Count Reached`, `error`) :
-            players.push(player);
+    const addPlayer = (playerName) => {
+        if (players.length >= 2) {
+            DOM_manager.dialog(`Max Player Count Reached`, `error`);
+        } else if (!getPlayers().some(e => e === playerName.getName())) {
+            players.push(playerName);
+        } else {
+            DOM_manager.dialog(`Choose Different Names`, `error`);
+        }
     };
 
     const getPlayer = (player) => {
@@ -218,7 +238,7 @@ const DOM_manager = (function () {
     }
 
     const storeCells = () => {
-        let z = 0;
+        let z = 1;
         for (let x = 0; x < 3; x++) {
             cells[x] = [];
             for (let y = 0; y < 3; y++) {
@@ -227,7 +247,6 @@ const DOM_manager = (function () {
                 cells[x].push(cell);
                 cell.addEventListener(`click`, function () {
                     boardManager.takeTurn(gameManager.getCurrentPlayer(), cell.getAttribute(`value`), this);
-                    gameManager.switchCurrentPlayer();
                 })
             }
         }
@@ -241,10 +260,26 @@ const DOM_manager = (function () {
         }
     }
 
+    const playerName_inputValue = (value) => {
+        let inputBox = document.querySelectorAll(`.inputContainer input`)[value];
+        return inputBox.value;
+    }
+
+    const winner = (value) => {
+        for (let x = 0; x < cells.length; x++) {
+            for (let y = 0; y < cells[x].length; y++) {
+                cells[x][y].classList.toggle(`winner`, value);
+            }
+        }
+        dialogBox.classList.toggle(`winner`, value);
+    }
+
     storeCells();
 
     return {
         dialog,
         resetDOM,
+        playerName_inputValue,
+        winner,
     }
 })();
