@@ -72,14 +72,18 @@ const boardManager = (function () {
     }
 
     const takeTurn = (player, choice) => {
-        choice = choice.toUpperCase();
-        for (let x = 0; x < 3; x++) {
-            for (let y = 0; y < board[x].length; y++) {
-                if (board[x][y] === choice) {
-                    board[x][y] = player;
-                    console.log(`Placing ${player} at ${x}, ${y}`);
+        if (player) {
+            choice = choice.toUpperCase();
+            for (let x = 0; x < 3; x++) {
+                for (let y = 0; y < board[x].length; y++) {
+                    if (board[x][y] === choice) {
+                        board[x][y] = player;
+                        console.log(`Placing ${player} at ${x}, ${y}`);
+                    }
                 }
             }
+        } else {
+            console.error(`Game Not Started`);
         }
     };
 
@@ -172,7 +176,7 @@ const DOM_manager = (function () {
                 const cell = document.querySelector(`.cell:nth-of-type(${z})`);
                 cells[x].push(cell);
                 cell.addEventListener(`click`, () => {
-
+                    boardManager.takeTurn(gameManager.getCurrentPlayer(), cell.getAttribute(`value`));
                 })
             }
         }
