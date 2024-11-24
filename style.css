@@ -2,6 +2,7 @@
     --primary-colour: #DDEFBB;
     --secondary-colour: #FFEEEE;
     --green-dark: #84885a;
+    --green: rgb(223, 231, 146);
 }
 
 *,
@@ -15,6 +16,7 @@
 }
 
 body {
+    user-select: none;
     -webkit-font-smoothing: antialiased;
     background: #FFEEEE;
     background: -webkit-linear-gradient(to right, #DDEFBB, #FFEEEE);
@@ -79,7 +81,7 @@ h6 {
 }
 
 button {
-    background-color: rgb(223, 231, 146);
+    background-color: var(--green);
     padding: 20px;
     border-radius: 10px;
     border: 5px solid var(--green-dark);
@@ -98,6 +100,12 @@ button:hover {
     background-color: rgba(26, 26, 26, 0.502);
     border-radius: 20px;
     transition: filter .5s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(1rem, calc(2rem + 5vh), 5rem);
+    font-weight: bold;
+    color: var(--green);
 }
 
 .cell:hover {

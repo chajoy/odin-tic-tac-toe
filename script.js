@@ -25,7 +25,7 @@ const gameManager = (function () {
 
     let currentPlayer;
 
-    const playGame = () => {
+    const setupGame = () => {
         let input, _player;
         for (let x = 1; x <= 2; x++) {
             do {
@@ -34,27 +34,23 @@ const gameManager = (function () {
             playerManager.addPlayer(Player(_player));
         }
 
-        currentPlayer = playerManager.getPlayer(1).getName();
+        currentPlayer = playerManager.getPlayer(1);
+    }
 
+    const getCurrentPlayer = () => currentPlayer ? currentPlayer.getName() : console.error(`No Current Player`);
 
-
-        input = prompt(`${currentPlayer}, Take Your Turn`);
-        boardManager.takeTurn(currentPlayer, input);
-
-        winner = boardManager.checkWinner();
+    const switchCurrentPlayer = () => {
         if (currentPlayer === playerManager.getPlayer(1).getName()) {
             currentPlayer = playerManager.getPlayer(2).getName();
         } else {
             currentPlayer = playerManager.getPlayer(1).getName();
         }
-
-
-        //if winner is found
-        winner ? console.log(`Winner is ${winner}`) : console.log(`Tie`);
     }
 
     return {
-        playGame,
+        setupGame,
+        getCurrentPlayer,
+        switchCurrentPlayer,
     }
 })();
 
@@ -175,18 +171,16 @@ const DOM_manager = (function () {
                 z++;
                 const cell = document.querySelector(`.cell:nth-of-type(${z})`);
                 cells[x].push(cell);
+                cell.addEventListener(`click`, () => {
+
+                })
             }
         }
     }
 
     storeCells();
 
-    const updateBoard = () => {
-
-    }
-
     return {
-        updateBoard,
         cells,
     }
 })();
