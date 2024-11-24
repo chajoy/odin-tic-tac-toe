@@ -209,7 +209,7 @@ const DOM_manager = (function () {
                 dialogBox.textContent = text;
                 break;
             case `general`:
-                dialogBox.style.color = `black`;
+                dialogBox.style.color = ``;
                 dialogBox.textContent = text;
                 break;
             default:

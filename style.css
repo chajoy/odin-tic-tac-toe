@@ -16,6 +16,7 @@
 }
 
 body {
+    color: var(--green-dark);
     user-select: none;
     -webkit-font-smoothing: antialiased;
     background: #FFEEEE;
